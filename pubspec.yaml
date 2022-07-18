@@ -1,0 +1,39 @@
+name: quote_request_app
+description: Simple riverpod demo app.
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.5 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  google_fonts: ^3.0.1
+
+  cupertino_icons: ^1.0.2
+  flutter_riverpod: ^1.0.4
+  riverpod: ^1.0.3
+  equatable: ^2.0.3
+  dio: any
+  url_launcher: ^6.1.5
+  intl: ^0.17.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.9.3
+
+  flutter_lints: ^2.0.0
+
+flutter:
+
+  uses-material-design: true
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: false
+  image_path: "assets/logo.png"
