@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../widgets/loading_widget.dart';
 
-import '../common/form_validator.dart';
-import '../common/providers.dart';
-import '../common/styles.dart';
-import '../providers/submit_quote_state.dart';
+import '../../common/form_validator.dart';
+import '../../common/providers.dart';
+import '../../common/styles.dart';
+import '../../providers/submit_quote_state.dart';
 
 class RequestQuoteScreen extends ConsumerStatefulWidget {
   const RequestQuoteScreen({Key? key}) : super(key: key);
@@ -40,7 +41,7 @@ class RequestQuoteScreenState extends ConsumerState<RequestQuoteScreen> {
   Widget build(BuildContext context) {
     ref.listen<SubmitQuoteState>(submitQuoteNotifier, (_, state) {
       if (state is SubmitQuoteSuccess) {
-        Navigator.pop(context);//Back to previous screen
+        Navigator.pop(context); //Back to previous screen
       }
       if (state is SubmitQuoteError) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -159,13 +160,7 @@ class RequestQuoteScreenState extends ConsumerState<RequestQuoteScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
               child: isLoading
-                  ? const Center(
-                      child: SizedBox(
-                        width: 22,
-                        height: 22,
-                        child: CircularProgressIndicator(strokeWidth: 1.5),
-                      ),
-                    )
+                  ? const LoadingWidget()
                   : const Text('SUBMIT REQUEST'),
             ),
           ],

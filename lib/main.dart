@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quote_request_app/screens/auth/login_screen.dart';
 
 import 'common/routes.dart' as routes;
-
-import 'screens/home_screen.dart';
 
 void main() {
   runApp(const QuoteRequestApp());
@@ -24,7 +23,7 @@ class QuoteRequestApp extends StatelessWidget {
           textTheme: GoogleFonts.dosisTextTheme(),
         ),
         onGenerateRoute: routes.onGenerate,
-        home: const HomeScreen(),
+        home: const LoginScreen(),
       ),
     );
   }

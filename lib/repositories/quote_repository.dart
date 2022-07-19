@@ -14,21 +14,9 @@ class QuoteRepositoryImpl implements QuoteRepository {
   QuoteRepositoryImpl(this._dio);
 
   @override
-  Future<void> deleteRequestedQuote(int requestedQuoteId) async {
-    try {
-      await _dio.delete(
-        '/requests',
-        queryParameters: {'id': 'eq.$requestedQuoteId'}, //check PostgREST docs
-      );
-    } catch (_) {
-      throw Future.error("Couldn't delete quote. Is the device online?");
-    }
-  }
-
-  @override
   Future<List<Quote>> getQuotes() async {
     try {
-      final response = await _dio.get('/requests', queryParameters: {
+      final response = await _dio.get('/rest/v1/requests', queryParameters: {
         'order': 'created_at.desc',
       });
 
@@ -43,15 +31,27 @@ class QuoteRepositoryImpl implements QuoteRepository {
   @override
   Future<Quote> submitQuote(Map<String, dynamic> quote) async {
     try {
-      final response = await _dio.post('/requests', data: quote);
+      final response = await _dio.post('/rest/v1/requests', data: quote);
 
       if (response.statusCode == 201) {
-        return Quote.fromMap(response.data[0]);
+        return Quote.fromMap(response.data.first);
       } else {
         throw Exception('Error submitting request quote');
       }
     } catch (_) {
       throw Future.error("Couldn't submit quote. Is the device online?");
+    }
+  }
+
+  @override
+  Future<void> deleteRequestedQuote(int requestedQuoteId) async {
+    try {
+      await _dio.delete(
+        '/rest/v1/requests',
+        queryParameters: {'id': 'eq.$requestedQuoteId'}, //check PostgREST docs
+      );
+    } catch (_) {
+      throw Future.error("Couldn't delete quote. Is the device online?");
     }
   }
 }

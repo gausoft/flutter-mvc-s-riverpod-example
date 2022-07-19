@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../common/providers.dart';
-import '../common/utils.dart';
-import '../providers/quotes_list_state.dart';
-import 'widgets/no_data_widget.dart';
-import 'widgets/request_quote_row.dart';
+import '../../common/providers.dart';
+import '../../common/utils.dart';
+import '../../providers/quotes_list_state.dart';
+import '../widgets/no_data_widget.dart';
+import '../widgets/request_quote_row.dart';
 
-class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class RequestListScreen extends ConsumerStatefulWidget {
+  const RequestListScreen({Key? key}) : super(key: key);
 
   @override
-  HomeScreenState createState() => HomeScreenState();
+  RequestListScreenState createState() => RequestListScreenState();
 }
 
-class HomeScreenState extends ConsumerState<HomeScreen> {
+class RequestListScreenState extends ConsumerState<RequestListScreen> {
   @override
   void initState() {
     super.initState();
