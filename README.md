@@ -12,7 +12,7 @@ Simple Flutter App to request a quote for a product made with [riverpod](https:/
 
 TODO:
 
-* [ ] Use freezed package
+* [x] Use freezed package
 * [x] User authentication
 * [ ] Details page
 * [ ] Edit item
