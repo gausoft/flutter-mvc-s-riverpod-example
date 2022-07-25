@@ -28,10 +28,9 @@ class AuthRepositoryImpl implements AuthRepository {
         throw Exception('An error occurred');
       }
     } on DioError catch (e) {
-      throw await Future.error(e.response!.data['error_description']);
+      throw Exception(e.response!.data['error_description']);
     } catch (e) {
-      debugPrint('AuthRepositoryImpl.login: $e');
-      throw await Future.error("Couldn't login. Is the device online?");
+      throw Exception("Couldn't login. Is the device online?");
     }
   }
 
@@ -42,13 +41,13 @@ class AuthRepositoryImpl implements AuthRepository {
       return UserModel.fromJson(response.data);
     } on DioError catch (e) {
       if (e.response!.statusCode == 400) {
-        throw await Future.error(e.response!.data['error_description']);
+        throw Exception(e.response!.data['error_description']);
       } else {
-        throw await Future.error(e.message);
+        throw Exception(e.message);
       }
     } catch (e, stack) {
       debugPrint('Error: $e\nStack : $stack');
-      throw await Future.error("Couldn't register. Is the device online?");
+      throw Exception("Couldn't register. Is the device online?");
     }
   }
 }

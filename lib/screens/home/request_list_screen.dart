@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../common/providers.dart';
 import '../../common/utils.dart';
-import '../../providers/quotes_list_state.dart';
 import '../widgets/no_data_widget.dart';
 import '../widgets/request_quote_row.dart';
 
@@ -41,42 +40,40 @@ class RequestListScreenState extends ConsumerState<RequestListScreen> {
         builder: (context, ref, child) {
           final quotesListState = ref.watch(quotesListNotifier);
 
-          if (quotesListState is QuotesListLoading) {
-            return const Center(
+          return quotesListState.maybeWhen(
+            loading: () => const Center(
               child: CircularProgressIndicator(),
-            );
-          } else if (quotesListState is QuotesListError) {
-            return Center(
-              child: Text(quotesListState.message),
-            );
-          } else {
-            final quotesList = (quotesListState as QuotesListLoaded).quotes;
-            return quotesList.isNotEmpty
-                ? ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: quotesList.length,
-                    itemBuilder: (context, index) {
-                      final quote = quotesList[index];
-                      return Dismissible(
-                        key: UniqueKey(),
-                        confirmDismiss: (_) async => openConfirmDialog(context),
-                        onDismissed: (direction) {
-                          ref
-                              .read(quotesListNotifier.notifier)
-                              .delete(quote.id!);
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Quote deleted successfully!'),
-                            ),
-                          );
-                        },
-                        child: RequestQuoteRow(quote: quote),
+            ),
+            success: (quotes) {
+              if (quotes.isEmpty) return const NoDataWidget();
+            
+              return ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: quotes.length,
+                itemBuilder: (context, index) {
+                  final quote = quotes[index];
+                  return Dismissible(
+                    key: UniqueKey(),
+                    confirmDismiss: (_) async => openConfirmDialog(context),
+                    onDismissed: (direction) {
+                      ref.read(quotesListNotifier.notifier).delete(quote.id!);
+                      
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Quote deleted successfully!'),
+                        ),
                       );
                     },
-                  )
-                : const Center(child: NoDataWidget());
-          }
+                    child: RequestQuoteRow(quote: quote),
+                  );
+                },
+              );
+            },
+            error: (err) => Center(child: Text(err)),
+            orElse: () => const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
         },
       ),
       floatingActionButton: FloatingActionButton.extended(

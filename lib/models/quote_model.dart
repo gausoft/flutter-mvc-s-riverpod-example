@@ -1,67 +1,21 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Quote extends Equatable {
-  const Quote({
-    this.id,
-    required this.productName,
-    required this.description,
-    required this.productLink,
-    required this.quantity,
-    this.createdAt,
-  });
+part 'quote_model.freezed.dart';
+part 'quote_model.g.dart';
 
-  final int? id;
-  final String productName;
-  final String description;
-  final String productLink;
-  final int quantity;
-  final DateTime? createdAt;
-
-  Quote copyWith({
+@freezed
+class Quote with _$Quote {
+  const factory Quote({
     int? id,
-    String? productName,
-    String? description,
-    String? productLink,
-    int? quantity,
+    @JsonKey(name: 'product_name') 
+    required String productName,
+    required String description,
+    @JsonKey(name: 'product_link') 
+    required String productLink,
+    required int quantity,
+    @JsonKey(name: 'created_at') 
     DateTime? createdAt,
-  }) {
-    return Quote(
-      id: id ?? this.id,
-      productName: productName ?? this.productName,
-      description: description ?? this.description,
-      productLink: productLink ?? this.productLink,
-      quantity: quantity ?? this.quantity,
-      createdAt: createdAt ?? this.createdAt,
-    );
-  }
+  }) = _Quote;
 
-  factory Quote.fromMap(Map<String, dynamic> map) {
-    return Quote(
-      id: map['id'],
-      productName: map['product_name'] as String,
-      description: map['description'] as String,
-      productLink: map['product_link'] as String,
-      quantity: int.parse('${map['quantity']}'),
-      createdAt: DateTime.parse(map['created_at']),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'product_name': productName,
-      'description': description,
-      'product_link': productLink,
-      'quantity': quantity,
-      'created_at': createdAt?.toIso8601String(),
-    };
-  }
-
-  @override
-  List<Object?> get props => [
-        productName,
-        description,
-        productLink,
-        quantity,
-        createdAt,
-      ];
+  factory Quote.fromJson(Map<String, dynamic> json) => _$QuoteFromJson(json);
 }

@@ -21,10 +21,10 @@ class QuoteRepositoryImpl implements QuoteRepository {
       });
 
       return (response.data as List<dynamic>)
-          .map((e) => Quote.fromMap(e))
+          .map((e) => Quote.fromJson(e))
           .toList();
     } catch (_) {
-      throw Future.error("Couldn't fetch quotes. Is the device online?");
+      throw Exception("Couldn't fetch quotes. Is the device online?");
     }
   }
 
@@ -34,12 +34,12 @@ class QuoteRepositoryImpl implements QuoteRepository {
       final response = await _dio.post('/rest/v1/requests', data: quote);
 
       if (response.statusCode == 201) {
-        return Quote.fromMap(response.data.first);
+        return Quote.fromJson(response.data.first);
       } else {
         throw Exception('Error submitting request quote');
       }
     } catch (_) {
-      throw Future.error("Couldn't submit quote. Is the device online?");
+      throw Exception("Couldn't submit quote. Is the device online?");
     }
   }
 
@@ -51,7 +51,7 @@ class QuoteRepositoryImpl implements QuoteRepository {
         queryParameters: {'id': 'eq.$requestedQuoteId'}, //check PostgREST docs
       );
     } catch (_) {
-      throw Future.error("Couldn't delete quote. Is the device online?");
+      throw Exception("Couldn't delete quote. Is the device online?");
     }
   }
 }

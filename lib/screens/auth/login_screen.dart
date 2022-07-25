@@ -43,21 +43,23 @@ class LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authNotifier);
-    final isLoading = authState is AuthLoading;
 
     ref.listen<AuthState>(authNotifier, (_, state) {
-      if (state is AuthSuccess) {
-        Navigator.pushReplacementNamed(context, '/request-list');
-      }
-
-      if (state is AuthError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(state.message),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      state.maybeWhen(
+        success: (user) => Navigator.pushReplacementNamed(
+          context,
+          '/request-list',
+        ),
+        error: (err) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(err),
+              backgroundColor: Colors.red,
+            ),
+          );
+        },
+        orElse: () {},
+      );
     });
 
     return Scaffold(
@@ -141,7 +143,10 @@ class LoginScreenState extends ConsumerState<LoginScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: isLoading ? null : _handleUserLogin,
+                onPressed: authState.maybeWhen(
+                  loading: () => null,
+                  orElse: () => _handleUserLogin,
+                ),
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
                   shape: RoundedRectangleBorder(
@@ -149,7 +154,10 @@ class LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: isLoading ? const LoadingWidget() : const Text('LOGIN'),
+                child: authState.maybeWhen(
+                  loading: () => const LoadingWidget(),
+                  orElse: () => const Text('LOGIN'),
+                ),
               ),
             ),
             const Padding(

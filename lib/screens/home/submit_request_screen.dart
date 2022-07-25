@@ -5,7 +5,7 @@ import '../widgets/loading_widget.dart';
 import '../../common/form_validator.dart';
 import '../../common/providers.dart';
 import '../../common/styles.dart';
-import '../../providers/submit_quote_state.dart';
+import '../../providers/quote_request/submit_quote_state.dart';
 
 class RequestQuoteScreen extends ConsumerStatefulWidget {
   const RequestQuoteScreen({Key? key}) : super(key: key);
@@ -40,20 +40,18 @@ class RequestQuoteScreenState extends ConsumerState<RequestQuoteScreen> {
   @override
   Widget build(BuildContext context) {
     ref.listen<SubmitQuoteState>(submitQuoteNotifier, (_, state) {
-      if (state is SubmitQuoteSuccess) {
-        Navigator.pop(context); //Back to previous screen
-      }
-      if (state is SubmitQuoteError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: ${state.message}'),
-          ),
-        );
-      }
+      state.maybeWhen(
+        success: (_) => Navigator.of(context).pop(),
+        error: (error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: $error')),
+          );
+        },
+        orElse: () {},
+      );
     });
 
     final quoteState = ref.watch(submitQuoteNotifier);
-    final isLoading = quoteState is SubmitQuoteLoading;
 
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
@@ -151,7 +149,10 @@ class RequestQuoteScreenState extends ConsumerState<RequestQuoteScreen> {
             ),
             const SizedBox(height: 24),
             ElevatedButton(
-              onPressed: isLoading ? null : _handleFormSubmission,
+              onPressed: quoteState.maybeWhen(
+                loading: () => null,
+                orElse: () => _handleFormSubmission,
+              ),
               style: ElevatedButton.styleFrom(
                 elevation: 0,
                 shape: RoundedRectangleBorder(
@@ -159,9 +160,10 @@ class RequestQuoteScreenState extends ConsumerState<RequestQuoteScreen> {
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
-              child: isLoading
-                  ? const LoadingWidget()
-                  : const Text('SUBMIT REQUEST'),
+              child: quoteState.maybeWhen(
+                loading: () => const LoadingWidget(),
+                orElse: () => const Text('SUBMIT REQUEST'),
+              ),
             ),
           ],
         ),

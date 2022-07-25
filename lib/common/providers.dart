@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/auth/auth_notifier.dart';
 import '../providers/auth/auth_state.dart';
-import '../providers/quotes_list_notifier.dart';
-import '../providers/quotes_list_state.dart';
-import '../providers/submit_quote_notifier.dart';
-import '../providers/submit_quote_state.dart';
+import '../providers/quote_request/quotes_list_notifier.dart';
+import '../providers/quote_request/quotes_list_state.dart';
+import '../providers/quote_request/submit_quote_notifier.dart';
+import '../providers/quote_request/submit_quote_state.dart';
 import '../repositories/auth_repository.dart';
 import '../repositories/quote_repository.dart';
 import 'constants.dart';

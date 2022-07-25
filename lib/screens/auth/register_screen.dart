@@ -6,7 +6,6 @@ import 'package:quote_request_app/providers/auth/auth_state.dart';
 import 'package:quote_request_app/screens/widgets/loading_widget.dart';
 
 import '../../common/styles.dart';
-import '../../providers/auth/auth_notifier.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -57,28 +56,30 @@ class RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AuthNotifier>(authNotifier.notifier, (_, state) {
-      if (state is AuthSuccess) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Registration successful. Please login.'),
-            backgroundColor: Colors.green,
-          ),
-        );
-        Navigator.pushReplacementNamed(context, '/login');
-      }
-
-      if (state is AuthError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: ${(state as AuthError).message}'),
-          ),
-        );
-      }
+    ref.listen<AuthState>(authNotifier, (_, state) {
+      state.maybeWhen(
+        success: (user) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Registration successful. Please login.'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.pushReplacementNamed(context, '/login');
+        },
+        error: (err) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(err),
+              backgroundColor: Colors.red,
+            ),
+          );
+        },
+        orElse: () {},
+      );
     });
 
     final authState = ref.watch(authNotifier);
-    final isLoading = authState is AuthLoading;
 
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
@@ -220,7 +221,10 @@ class RegisterScreenState extends ConsumerState<RegisterScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: isLoading ? null : _handleUserRegistration,
+                onPressed: authState.maybeWhen(
+                  loading: () => null,
+                  orElse: () => _handleUserRegistration,
+                ),
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
                   shape: RoundedRectangleBorder(
@@ -228,8 +232,10 @@ class RegisterScreenState extends ConsumerState<RegisterScreen> {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child:
-                    isLoading ? const LoadingWidget() : const Text('REGISTER'),
+                child: authState.maybeWhen(
+                  loading: () => const LoadingWidget(),
+                  orElse: () => const Text('REGISTER'),
+                ),
               ),
             ),
             const Padding(
