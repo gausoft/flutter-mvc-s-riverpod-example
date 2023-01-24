@@ -3,17 +3,11 @@ import 'package:flutter/foundation.dart';
 
 import '../models/user_model.dart';
 
-abstract class AuthRepository {
-  Future<UserModel> login(String email, String password);
-  Future<UserModel> register(Map<String, dynamic> userData);
-}
-
-class AuthRepositoryImpl implements AuthRepository {
+class AuthService {
   final Dio _dio;
 
-  AuthRepositoryImpl(this._dio);
+  AuthService(this._dio);
 
-  @override
   Future<UserModel> login(String email, String password) async {
     try {
       final response = await _dio.post(
@@ -34,7 +28,6 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
-  @override
   Future<UserModel> register(Map<String, dynamic> userData) async {
     try {
       final response = await _dio.post('/auth/v1/signup', data: userData);

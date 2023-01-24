@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quote_request_app/common/data_state.dart';
 import '../widgets/loading_widget.dart';
 
 import '../../common/form_validator.dart';
 import '../../common/providers.dart';
 import '../../common/styles.dart';
-import '../../providers/quote_request/submit_quote_state.dart';
 
 class RequestQuoteScreen extends ConsumerStatefulWidget {
   const RequestQuoteScreen({Key? key}) : super(key: key);
@@ -33,16 +33,16 @@ class RequestQuoteScreenState extends ConsumerState<RequestQuoteScreen> {
         'quantity': _quantityController.text,
       };
 
-      ref.read(submitQuoteNotifier.notifier).submitQuote(data);
+      ref.read(estimateNotifierProvider.notifier).submitQuote(data);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<SubmitQuoteState>(submitQuoteNotifier, (_, state) {
+    ref.listen<DataState>(estimateNotifierProvider, (_, state) {
       state.maybeWhen(
         success: (_) => Navigator.of(context).pop(),
-        error: (error) {
+        error: (error, _) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Error: $error')),
           );
@@ -51,7 +51,7 @@ class RequestQuoteScreenState extends ConsumerState<RequestQuoteScreen> {
       );
     });
 
-    final quoteState = ref.watch(submitQuoteNotifier);
+    final quoteState = ref.watch(estimateNotifierProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),

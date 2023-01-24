@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../common/data_state.dart';
 import '../../common/form_validator.dart';
 import '../../common/providers.dart';
 import '../../common/styles.dart';
-import '../../providers/auth/auth_state.dart';
 import '../widgets/loading_widget.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -44,13 +44,13 @@ class LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authNotifier);
 
-    ref.listen<AuthState>(authNotifier, (_, state) {
+    ref.listen<DataState>(authNotifier, (_, state) {
       state.maybeWhen(
         success: (user) => Navigator.pushReplacementNamed(
           context,
           '/request-list',
         ),
-        error: (err) {
+        error: (err, _) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(err),

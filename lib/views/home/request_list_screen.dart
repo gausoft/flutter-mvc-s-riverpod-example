@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../common/app_router.dart';
 import '../../common/providers.dart';
-import '../../common/utils.dart';
 import '../widgets/no_data_widget.dart';
 import '../widgets/request_quote_row.dart';
 
@@ -17,7 +18,7 @@ class RequestListScreenState extends ConsumerState<RequestListScreen> {
   @override
   void initState() {
     super.initState();
-    ref.read(quotesListNotifier.notifier).getQuotes();
+    ref.read(estimateNotifierProvider.notifier).getQuotes();
   }
 
   @override
@@ -38,15 +39,15 @@ class RequestListScreenState extends ConsumerState<RequestListScreen> {
       ),
       body: Consumer(
         builder: (context, ref, child) {
-          final quotesListState = ref.watch(quotesListNotifier);
-
+          final quotesListState = ref.watch(estimateNotifierProvider);
+          final aaaa = ref.watch(confirmDialogProvider(context));
           return quotesListState.maybeWhen(
             loading: () => const Center(
               child: CircularProgressIndicator(),
             ),
             success: (quotes) {
               if (quotes.isEmpty) return const NoDataWidget();
-            
+
               return ListView.builder(
                 padding: const EdgeInsets.all(16),
                 itemCount: quotes.length,
@@ -54,10 +55,14 @@ class RequestListScreenState extends ConsumerState<RequestListScreen> {
                   final quote = quotes[index];
                   return Dismissible(
                     key: UniqueKey(),
-                    confirmDismiss: (_) async => openConfirmDialog(context),
+                    confirmDismiss: (_) => ref.watch(
+                      confirmDialogProvider(context),
+                    ),
                     onDismissed: (direction) {
-                      ref.read(quotesListNotifier.notifier).delete(quote.id!);
-                      
+                      ref
+                          .read(estimateNotifierProvider.notifier)
+                          .delete(quote.id!);
+
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Quote deleted successfully!'),
@@ -69,7 +74,7 @@ class RequestListScreenState extends ConsumerState<RequestListScreen> {
                 },
               );
             },
-            error: (err) => Center(child: Text(err)),
+            error: (err, _) => Center(child: Text(err)),
             orElse: () => const Center(
               child: CircularProgressIndicator(),
             ),
@@ -77,7 +82,7 @@ class RequestListScreenState extends ConsumerState<RequestListScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.pushNamed(context, '/request-quote'),
+        onPressed: () => context.pushNamed(AppRoutes.submitRequest.name),
         label: Row(
           children: const [
             Icon(Icons.pending_actions),

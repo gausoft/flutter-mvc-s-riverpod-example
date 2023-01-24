@@ -23,6 +23,7 @@ dependencies:
   intl: ^0.17.0
   freezed_annotation: ^2.1.0
   json_annotation: ^4.6.0
+  go_router: ^6.0.1
 
 dev_dependencies:
   flutter_test:

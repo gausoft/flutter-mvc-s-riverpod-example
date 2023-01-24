@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../common/providers.dart';
 import '../../models/quote_model.dart';
-import '../../common/utils.dart';
 
-class RequestQuoteRow extends StatelessWidget {
+class RequestQuoteRow extends ConsumerWidget {
   final Quote quote;
 
   const RequestQuoteRow({Key? key, required this.quote}) : super(key: key);
@@ -16,7 +17,8 @@ class RequestQuoteRow extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dateFormat = ref.watch(dateFormatProvider);
     return Container(
       height: 88,
       margin: const EdgeInsets.only(bottom: 10),
@@ -87,7 +89,7 @@ class RequestQuoteRow extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          convertDate(quote.createdAt!),
+                          dateFormat.format(quote.createdAt!),
                           style: const TextStyle(
                             color: Colors.black45,
                             fontSize: 12,

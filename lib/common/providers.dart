@@ -1,15 +1,16 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
-import '../providers/auth/auth_notifier.dart';
-import '../providers/auth/auth_state.dart';
-import '../providers/quote_request/quotes_list_notifier.dart';
-import '../providers/quote_request/quotes_list_state.dart';
-import '../providers/quote_request/submit_quote_notifier.dart';
-import '../providers/quote_request/submit_quote_state.dart';
-import '../repositories/auth_repository.dart';
-import '../repositories/quote_repository.dart';
+import '../controllers/auth_notifier.dart';
+import '../controllers/estimate_notifier.dart';
+import '../services/auth_service.dart';
+import '../services/estimate_service.dart';
+import '../views/widgets/delete_item_dialog.dart';
 import 'constants.dart';
+import 'data_state.dart';
 
 final dioProvider = Provider<Dio>(
   (ref) => Dio(
@@ -23,29 +24,37 @@ final dioProvider = Provider<Dio>(
   ),
 );
 
-//Repositories
-final repositoryProvider = Provider<QuoteRepository>(
-  (ref) => QuoteRepositoryImpl(ref.read(dioProvider)),
+final dateFormatProvider = Provider((_) {
+  initializeDateFormatting();
+
+  return DateFormat('yyyy-MM-dd hh:mm');
+});
+
+final confirmDialogProvider =
+    Provider.family((ref, BuildContext context) async {
+  return await showDialog<Future<bool?>>(
+    context: context,
+    builder: (BuildContext context) {
+      return const DeteleItemDialog();
+    },
+  );
+});
+
+//Services
+final estimateServiceProvider = Provider<EstimateService>(
+  (ref) => EstimateService(ref.read(dioProvider)),
 );
 
-final authRepositoryProvider = Provider<AuthRepository>(
-  (ref) => AuthRepositoryImpl(ref.read(dioProvider)),
+final authServiceProvider = Provider<AuthService>(
+  (ref) => AuthService(ref.read(dioProvider)),
 );
 
 //Notifiers
-final quotesListNotifier =
-    StateNotifierProvider<QuotesListNotifier, QuotesListState>(
-  (ref) => QuotesListNotifier(ref.read(repositoryProvider)),
+final estimateNotifierProvider =
+    StateNotifierProvider<EstimateNotifier, DataState>(
+  (ref) => EstimateNotifier(ref.read(estimateServiceProvider)),
 );
 
-final submitQuoteNotifier =
-    StateNotifierProvider<SubmitQuoteNotifier, SubmitQuoteState>(
-  (ref) {
-    final notifier = ref.read(quotesListNotifier.notifier);
-    return SubmitQuoteNotifier(ref.read(repositoryProvider), notifier);
-  },
-);
-
-final authNotifier = StateNotifierProvider<AuthNotifier, AuthState>(
-  (ref) => AuthNotifier(ref.read(authRepositoryProvider)),
+final authNotifier = StateNotifierProvider<AuthNotifier, DataState>(
+  (ref) => AuthNotifier(ref.read(authServiceProvider)),
 );

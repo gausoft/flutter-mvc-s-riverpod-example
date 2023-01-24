@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:quote_request_app/common/app_router.dart';
 import 'package:quote_request_app/common/form_validator.dart';
 import 'package:quote_request_app/common/providers.dart';
-import 'package:quote_request_app/providers/auth/auth_state.dart';
-import 'package:quote_request_app/screens/widgets/loading_widget.dart';
+import 'package:quote_request_app/views/widgets/loading_widget.dart';
 
+import '../../common/data_state.dart';
 import '../../common/styles.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -56,7 +58,7 @@ class RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AuthState>(authNotifier, (_, state) {
+    ref.listen<DataState>(authNotifier, (_, state) {
       state.maybeWhen(
         success: (user) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -65,9 +67,9 @@ class RegisterScreenState extends ConsumerState<RegisterScreen> {
               backgroundColor: Colors.green,
             ),
           );
-          Navigator.pushReplacementNamed(context, '/login');
+          context.goNamed(AppRoutes.login.name);
         },
-        error: (err) {
+        error: (err, _) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(err),

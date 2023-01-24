@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quote_request_app/screens/auth/login_screen.dart';
 
-import 'common/routes.dart' as routes;
+import 'common/app_router.dart';
 
 void main() {
-  runApp(const QuoteRequestApp());
+  runApp(const ProviderScope(child: QuoteRequestApp()));
 }
 
-class QuoteRequestApp extends StatelessWidget {
+class QuoteRequestApp extends ConsumerWidget {
   const QuoteRequestApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(goRouterProvider);
     return ProviderScope(
-      child: MaterialApp(
+      child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        title: 'Riverpod Demo',
+        title: 'MVC Riverpod Freezed App',
         theme: ThemeData(
           primarySwatch: Colors.indigo,
-          textTheme: GoogleFonts.dosisTextTheme(),
+          textTheme: GoogleFonts.poppinsTextTheme(),
         ),
-        onGenerateRoute: routes.onGenerate,
-        home: const LoginScreen(),
+        routeInformationParser: router.routeInformationParser,
+        routeInformationProvider: router.routeInformationProvider,
+        routerDelegate: router.routerDelegate,
       ),
     );
   }

@@ -2,19 +2,12 @@ import 'package:dio/dio.dart';
 
 import '../models/quote_model.dart';
 
-abstract class QuoteRepository {
-  Future<Quote> submitQuote(Map<String, dynamic> quote);
-  Future<List<Quote>> getQuotes();
-  Future<void> deleteRequestedQuote(int requestedQuoteId);
-}
-
-class QuoteRepositoryImpl implements QuoteRepository {
+class EstimateService {
   final Dio _dio;
 
-  QuoteRepositoryImpl(this._dio);
+  EstimateService(this._dio);
 
-  @override
-  Future<List<Quote>> getQuotes() async {
+  Future<List<Quote>> getEstimates() async {
     try {
       final response = await _dio.get('/rest/v1/requests', queryParameters: {
         'order': 'created_at.desc',
@@ -28,8 +21,7 @@ class QuoteRepositoryImpl implements QuoteRepository {
     }
   }
 
-  @override
-  Future<Quote> submitQuote(Map<String, dynamic> quote) async {
+  Future<Quote> submitEstimate(Map<String, dynamic> quote) async {
     try {
       final response = await _dio.post('/rest/v1/requests', data: quote);
 
@@ -43,15 +35,14 @@ class QuoteRepositoryImpl implements QuoteRepository {
     }
   }
 
-  @override
-  Future<void> deleteRequestedQuote(int requestedQuoteId) async {
+  Future<void> deleteEstimate(int estimateId) async {
     try {
       await _dio.delete(
         '/rest/v1/requests',
-        queryParameters: {'id': 'eq.$requestedQuoteId'}, //check PostgREST docs
+        queryParameters: {'id': 'eq.$estimateId'},
       );
     } catch (_) {
-      throw Exception("Couldn't delete quote. Is the device online?");
+      throw Exception("Couldn't delete estimate. Is the device online?");
     }
   }
 }
