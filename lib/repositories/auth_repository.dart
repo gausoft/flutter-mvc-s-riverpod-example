@@ -18,8 +18,8 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final response = await _dio.post(
         '/auth/v1/token',
-        queryParameters: {'grant_type': 'password'},
-        data: {'email': email, 'password': password},
+        queryParameters: <String, dynamic>{'grant_type': 'password'},
+        data: <String, dynamic>{'email': email, 'password': password},
       );
 
       if (response.statusCode == 200) {

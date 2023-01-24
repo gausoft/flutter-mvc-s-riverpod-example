@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quote_request_app/common/form_validator.dart';
 
+import '../../common/form_validator.dart';
 import '../../common/providers.dart';
 import '../../common/styles.dart';
 import '../../providers/auth/auth_state.dart';
