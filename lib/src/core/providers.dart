@@ -4,13 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
-import '../controllers/auth_notifier.dart';
-import '../controllers/estimate_notifier.dart';
-import '../services/auth_service.dart';
-import '../services/estimate_service.dart';
-import '../views/widgets/delete_item_dialog.dart';
+import '../features/auth/controllers/auth_controller.dart';
+import '../features/auth/services/auth_service.dart';
+import '../features/estimates/controllers/estimate_controller.dart';
+import '../features/estimates/services/estimate_service.dart';
 import 'constants.dart';
 import 'data_state.dart';
+import 'widgets/delete_item_dialog.dart';
 
 final dioProvider = Provider<Dio>(
   (ref) => Dio(
@@ -51,10 +51,10 @@ final authServiceProvider = Provider<AuthService>(
 
 //Notifiers
 final estimateNotifierProvider =
-    StateNotifierProvider<EstimateNotifier, DataState>(
-  (ref) => EstimateNotifier(ref.read(estimateServiceProvider)),
+    StateNotifierProvider<EstimateController, DataState>(
+  (ref) => EstimateController(ref.read(estimateServiceProvider)),
 );
 
-final authNotifier = StateNotifierProvider<AuthNotifier, DataState>(
-  (ref) => AuthNotifier(ref.read(authServiceProvider)),
+final authNotifier = StateNotifierProvider<AuthController, DataState>(
+  (ref) => AuthController(ref.read(authServiceProvider)),
 );

@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../common/app_router.dart';
-import '../../common/providers.dart';
-import '../widgets/no_data_widget.dart';
-import '../widgets/request_quote_row.dart';
+import '../../../core/app_router.dart';
+import '../../../core/providers.dart';
+import '../../../core/widgets/no_data_widget.dart';
+import '../../../core/widgets/request_quote_row.dart';
 
-class RequestListScreen extends ConsumerStatefulWidget {
-  const RequestListScreen({Key? key}) : super(key: key);
+class EstimatesView extends ConsumerStatefulWidget {
+  const EstimatesView({Key? key}) : super(key: key);
 
   @override
-  RequestListScreenState createState() => RequestListScreenState();
+  EstimatesViewState createState() => EstimatesViewState();
 }
 
-class RequestListScreenState extends ConsumerState<RequestListScreen> {
+class EstimatesViewState extends ConsumerState<EstimatesView> {
   @override
   void initState() {
     super.initState();
@@ -40,7 +40,7 @@ class RequestListScreenState extends ConsumerState<RequestListScreen> {
       body: Consumer(
         builder: (context, ref, child) {
           final quotesListState = ref.watch(estimateNotifierProvider);
-          final aaaa = ref.watch(confirmDialogProvider(context));
+          
           return quotesListState.maybeWhen(
             loading: () => const Center(
               child: CircularProgressIndicator(),

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../views/auth/login_screen.dart';
-import '../views/auth/register_screen.dart';
-import '../views/home/request_list_screen.dart';
-import '../views/home/submit_request_screen.dart';
+import '../features/auth/views/login_view.dart';
+import '../features/auth/views/register_view.dart';
+import '../features/estimates/views/estimate_form_view.dart';
+import '../features/estimates/views/estimates_vew.dart';
 
 enum AppRoutes {
   login('/login'),
@@ -40,8 +40,8 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.login.path,
           name: AppRoutes.login.name,
-          pageBuilder: (context, state) => CupertinoPage<LoginScreen>(
-            child: const LoginScreen(),
+          pageBuilder: (context, state) => CupertinoPage<LoginView>(
+            child: const LoginView(),
             key: state.pageKey,
             restorationId: state.pageKey.value,
           ),
@@ -49,8 +49,8 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.register.path,
           name: AppRoutes.register.name,
-          pageBuilder: (context, state) => CupertinoPage<RegisterScreen>(
-            child: const RegisterScreen(),
+          pageBuilder: (context, state) => CupertinoPage<RegisterView>(
+            child: const RegisterView(),
             key: state.pageKey,
             restorationId: state.pageKey.value,
           ),
@@ -58,8 +58,8 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.home.path,
           name: AppRoutes.home.name,
-          pageBuilder: (context, state) => CupertinoPage<RequestListScreen>(
-            child: const RequestListScreen(),
+          pageBuilder: (context, state) => CupertinoPage<EstimatesView>(
+            child: const EstimatesView(),
             key: state.pageKey,
             restorationId: state.pageKey.value,
           ),
@@ -67,8 +67,8 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.submitRequest.path,
           name: AppRoutes.submitRequest.name,
-          pageBuilder: (context, state) => CupertinoPage<RequestQuoteScreen>(
-            child: const RequestQuoteScreen(),
+          pageBuilder: (context, state) => CupertinoPage<EstimateFormView>(
+            child: const EstimateFormView(),
             key: state.pageKey,
             restorationId: state.pageKey.value,
           ),

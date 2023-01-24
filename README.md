@@ -1,6 +1,6 @@
-### Get a quote App
+### Request an estimate App with riverpod and freezed
 
-Simple Flutter App to request a quote for a product made with [riverpod](https://riverpod.dev)
+Simple Flutter App to showcase MVC+S pattern using riverpod and freezed package.
 
 #### Backend : [Superbase](https://supabase.com/) REST API ([PostgREST](https://postgrest.org/))
 

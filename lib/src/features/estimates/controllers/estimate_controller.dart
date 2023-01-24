@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../common/data_state.dart';
+import '../../../core/data_state.dart';
 import '../models/quote_model.dart';
 import '../services/estimate_service.dart';
 
-class EstimateNotifier extends StateNotifier<DataState> {
-  EstimateNotifier(this._estimateService) : super(const DataState.initial());
+class EstimateController extends StateNotifier<DataState> {
+  EstimateController(this._estimateService) : super(const DataState.initial());
 
   final EstimateService _estimateService;
 

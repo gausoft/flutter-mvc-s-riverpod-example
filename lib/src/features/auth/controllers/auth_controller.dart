@@ -1,10 +1,10 @@
 import 'package:riverpod/riverpod.dart';
 
-import '../common/data_state.dart';
+import '../../../core/data_state.dart';
 import '../services/auth_service.dart';
 
-class AuthNotifier extends StateNotifier<DataState> {
-  AuthNotifier(this._authService) : super(const DataState.initial());
+class AuthController extends StateNotifier<DataState> {
+  AuthController(this._authService) : super(const DataState.initial());
 
   final AuthService _authService;
 

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../common/providers.dart';
-import '../../models/quote_model.dart';
+import '../providers.dart';
+import '../../features/estimates/models/quote_model.dart';
 
 class RequestQuoteRow extends ConsumerWidget {
   final Quote quote;

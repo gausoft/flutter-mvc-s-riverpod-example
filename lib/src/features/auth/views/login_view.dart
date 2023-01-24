@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../common/data_state.dart';
-import '../../common/form_validator.dart';
-import '../../common/providers.dart';
-import '../../common/styles.dart';
-import '../widgets/loading_widget.dart';
+import '../../../core/data_state.dart';
+import '../../../core/form_validator.dart';
+import '../../../core/providers.dart';
+import '../../../core/styles.dart';
+import '../../../core/widgets/loading_widget.dart';
 
-class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class LoginView extends ConsumerStatefulWidget {
+  const LoginView({Key? key}) : super(key: key);
 
   @override
-  LoginScreenState createState() => LoginScreenState();
+  LoginViewState createState() => LoginViewState();
 }
 
-class LoginScreenState extends ConsumerState<LoginScreen> {
+class LoginViewState extends ConsumerState<LoginView> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();

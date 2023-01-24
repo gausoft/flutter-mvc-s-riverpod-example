@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:quote_request_app/common/app_router.dart';
-import 'package:quote_request_app/common/form_validator.dart';
-import 'package:quote_request_app/common/providers.dart';
-import 'package:quote_request_app/views/widgets/loading_widget.dart';
 
-import '../../common/data_state.dart';
-import '../../common/styles.dart';
+import '../../../core/app_router.dart';
+import '../../../core/data_state.dart';
+import '../../../core/form_validator.dart';
+import '../../../core/providers.dart';
+import '../../../core/styles.dart';
+import '../../../core/widgets/loading_widget.dart';
 
-class RegisterScreen extends ConsumerStatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+class RegisterView extends ConsumerStatefulWidget {
+  const RegisterView({Key? key}) : super(key: key);
 
   @override
-  RegisterScreenState createState() => RegisterScreenState();
+  RegisterViewState createState() => RegisterViewState();
 }
 
-class RegisterScreenState extends ConsumerState<RegisterScreen> {
+class RegisterViewState extends ConsumerState<RegisterView> {
   final _formKey = GlobalKey<FormState>();
   final _fullnameController = TextEditingController();
   final _emailController = TextEditingController();

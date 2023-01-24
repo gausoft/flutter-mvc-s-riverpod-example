@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quote_request_app/common/data_state.dart';
-import '../widgets/loading_widget.dart';
 
-import '../../common/form_validator.dart';
-import '../../common/providers.dart';
-import '../../common/styles.dart';
+import '../../../core/data_state.dart';
+import '../../../core/form_validator.dart';
+import '../../../core/providers.dart';
+import '../../../core/styles.dart';
+import '../../../core/widgets/loading_widget.dart';
 
-class RequestQuoteScreen extends ConsumerStatefulWidget {
-  const RequestQuoteScreen({Key? key}) : super(key: key);
+class EstimateFormView extends ConsumerStatefulWidget {
+  const EstimateFormView({Key? key}) : super(key: key);
 
   @override
-  RequestQuoteScreenState createState() => RequestQuoteScreenState();
+  EstimateFormViewState createState() => EstimateFormViewState();
 }
 
-class RequestQuoteScreenState extends ConsumerState<RequestQuoteScreen> {
+class EstimateFormViewState extends ConsumerState<EstimateFormView> {
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _productLinkController = TextEditingController();
